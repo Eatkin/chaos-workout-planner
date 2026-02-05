@@ -4,7 +4,7 @@ Do you find home workout apps dreadfully tedious and boring?
 
 Do you want something that's more...personal? Such as bicep curls followed by solving a Rubik's cube then balancing a broom pole on your nose?
 
-Chaos Exercise Planner is a fun, chaotic, randomised exercise routine generator! Mix and match different categories to insert anything you want into your routines! Optional background music to get you pumped!
+Inspired by Chess Boxing, Chaos Exercise Planner is a fun, chaotic, randomised exercise routine generator! Mix and match different categories to insert anything you want into your routines! Optional background music to get you pumped!
 
 ## Quick Start
 
