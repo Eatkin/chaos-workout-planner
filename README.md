@@ -97,8 +97,11 @@ pytest tests/
 - `src/hero_workout/` - main application code  
   - `planner.py` - exercise planning logic  
   - `runner.py` - executes a planned session with optional TTS and music  
-  - `music_handler.py` - music playback and management  
+  - `music.py` - music playback and management  
   - `config.py` - paths, environment, logging  
+  - `cli.py` - parse cli arguments
+  - `exercise.py` - Exercise dataclass and data loading
+  - `logging_config.py` - logger setup
 - `tests/` - test suite  
 - `README.md` - this file  
 - `pyproject.toml` / `requirements.txt` - dependencies  
