@@ -1,0 +1,5 @@
+playsound3
+pygame
+pyttsx3
+pyyaml
+types-PyYAML
