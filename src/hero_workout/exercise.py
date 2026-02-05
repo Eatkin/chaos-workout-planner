@@ -1,4 +1,3 @@
-import os
 from dataclasses import dataclass
 from typing import Dict
 from typing import List
@@ -6,11 +5,7 @@ from typing import Optional
 
 import yaml
 
-DATA_SRC = os.environ.get("DATA_SOURCES_DIR")
-if not DATA_SRC:
-    raise ValueError("DATA_SOURCES_DIR environment variable not set!!")
-
-_heroic_exercises = os.path.join(DATA_SRC, "hero_workout", "heroic_exercises.yaml")
+from hero_workout.config import HEROIC_EXERCISES
 
 @dataclass
 class Exercise:
@@ -25,7 +20,7 @@ class Exercise:
     variants: Optional[List[str]] = None
 
 def load_exercises() -> List[Exercise]:
-    with open(_heroic_exercises, "r") as f:
+    with open(HEROIC_EXERCISES, "r") as f:
         data = yaml.safe_load(f)
     exercises = []
     # Parse

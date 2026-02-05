@@ -8,13 +8,8 @@ from typing import Optional
 import pygame
 
 from hero_workout.logging_config import get_logger
+from hero_workout.config import MUSIC_SRC
 
-
-DATA_SRC = os.environ.get("DATA_SOURCES_DIR")
-if not DATA_SRC:
-    raise ValueError("DATA_SOURCES_DIR environment variable not set!!")
-
-MUSIC_SRC = os.path.join(DATA_SRC, "hero_workout", "music")
 
 class MusicHandler:
     def __init__(self, fade_ms: int = 1000, music_dir: str = MUSIC_SRC):

@@ -1,0 +1,58 @@
+categories:
+  Strength:
+    - name: Squats
+      duration_sec:
+        easy: [15, 30]
+        medium: [30, 60]
+        heroic: [60, 90]
+      location: indoor
+      props: []
+      max_reps: 3
+
+    - name: Dumbbell curls
+      duration_sec:
+        easy: [15, 30]
+        medium: [30, 60]
+        heroic: [60, 90]
+      location: indoor
+      props: [dumbbells]
+      max_reps: 3
+
+  Balance_Coordination:
+    - name: Slackline balance
+      duration_sec:
+        easy: [20, 30]
+        medium: [30, 50]
+        heroic: [50, 70]
+      location: outdoor
+      props: [slackboard]
+      max_reps: 3
+
+    - name: Broom pole balance
+      duration_sec:
+        easy: [20, 30]
+        medium: [30, 45]
+        heroic: [45, 60]
+      location: indoor
+      props: [broom_pole]
+      variants:
+        - chin
+        - forehead
+      max_reps: 3
+
+  Brain_Dexterity:
+    - name: Rubik's Cube
+      duration_sec:
+        easy: [30, 45]
+        medium: [45, 60]
+        heroic: [60, 90]
+      location: indoor
+      props: [rubiks_cube]
+
+    - name: Pen spinning
+      duration_sec:
+        easy: [15, 25]
+        medium: [25, 40]
+        heroic: [40, 60]
+      location: indoor
+      props: [pen]

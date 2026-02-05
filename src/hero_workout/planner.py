@@ -56,29 +56,29 @@ class Planner:
             # Circuit breaker if we've picked everything
             self.categories = list(self.exercises_by_category.keys())
             if not self.categories:
+                self.logger.debug("Categories exhausted")
                 break
             
             category = choice(self.categories)
-            ex = self.exercises_by_category[category].pop()
-            # If same as previous repeat
-            if planned and ex.name == planned[-1].name:
-                # It is possible we get stuck here where there's only one exercise and one category remaining
-                # Because it would try and pick a repeat forever
-                # So check for that too
-                # (Gross)
-                if len(self.exercises_by_category) == 1 and len(self.exercises_by_category[list(self.exercises_by_category.keys())[0]]) == 1:
-                    break
+            candidates: List[Exercise] = [e for e in self.exercises_by_category[category]
+              if not planned or e.name != planned[-1].name]
 
-                # Return the exercise
-                self.exercises_by_category[category].append(ex)
+            if not candidates:
+                # There will never be anymore candidates if there's one category and zero candidates
+                if len(self.exercises_by_category) == 1:
+                    self.logger.debug("Nothing to add without repeats")
+                    break
                 continue
+
+            ex = candidates[0]
 
             ex_copy = Exercise(**ex.__dict__)  # shallow copy
             if ex_copy.max_reps > 1:
-                # Append this to the end and shuffle
+                # Reduce reps by one and shuffle
                 ex.max_reps -= 1
-                self.exercises_by_category[category].append(ex)
                 shuffle(self.exercises_by_category[category])
+            else:
+                self.exercises_by_category[category].remove(ex)
 
             # Remove category if empty
             if not self.exercises_by_category[category]:
