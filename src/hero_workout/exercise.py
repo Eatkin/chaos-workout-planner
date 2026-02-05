@@ -18,6 +18,7 @@ class Exercise:
     category: str
     location: str
     props: list[str]
+    max_reps: int = 1
     assigned_duration: Optional[int] = None
     duration_sec: Optional[Dict[str, List[int]]] = None
     assigned_variant: Optional[str] = None

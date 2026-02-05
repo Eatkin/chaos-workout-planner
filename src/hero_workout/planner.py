@@ -14,6 +14,8 @@ class Planner:
         self.logger = get_logger(self.__class__.__name__)
         self.location = location
         self.exercises = [ex for ex in exercises if self._filter_exercise(ex)]
+        if not self.exercises:
+            raise RuntimeError("No exercises could be found given the constraints!!")
         self.intensity = intensity
 
         # Derived properties
@@ -49,8 +51,8 @@ class Planner:
         return planned
 
     def plan(self, num_exercises: int) -> List[Exercise]:
-        planned = []
-        for _ in range(num_exercises):
+        planned: List[Exercise] = []
+        while len(planned) < num_exercises:
             # Circuit breaker if we've picked everything
             self.categories = list(self.exercises_by_category.keys())
             if not self.categories:
@@ -58,7 +60,25 @@ class Planner:
             
             category = choice(self.categories)
             ex = self.exercises_by_category[category].pop()
+            # If same as previous repeat
+            if planned and ex.name == planned[-1].name:
+                # It is possible we get stuck here where there's only one exercise and one category remaining
+                # Because it would try and pick a repeat forever
+                # So check for that too
+                # (Gross)
+                if len(self.exercises_by_category) == 1 and len(self.exercises_by_category[list(self.exercises_by_category.keys())[0]]) == 1:
+                    break
+
+                # Return the exercise
+                self.exercises_by_category[category].append(ex)
+                continue
+
             ex_copy = Exercise(**ex.__dict__)  # shallow copy
+            if ex_copy.max_reps > 1:
+                # Append this to the end and shuffle
+                ex.max_reps -= 1
+                self.exercises_by_category[category].append(ex)
+                shuffle(self.exercises_by_category[category])
 
             # Remove category if empty
             if not self.exercises_by_category[category]:

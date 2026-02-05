@@ -1,8 +1,8 @@
 # Base pyproject.toml template 
 # Linting rules for max line length, max complexity, enforced one import per line
 [project]
-name = "hero_workouts"
-version = "0.1.0"
+name = "Chaos Exercise Planner"
+version = "1.0.0"
 description = "Heroic workout generator like Warioware but in a Terminal"
 readme = "README.md"
 requires-python = ">=3.12"

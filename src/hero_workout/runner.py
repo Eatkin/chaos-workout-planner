@@ -8,11 +8,12 @@ from hero_workout.planner import Planner
 from hero_workout.logging_config import get_logger
 
 class Runner:
-    def __init__(self, intensity: str = "medium", location: str = "Any", num_exercises: int = 10) -> None:
+    def __init__(self, intensity: str = "medium", location: str = "any", num_exercises: int = 10, headless: bool = False) -> None:
         self.logger = get_logger(self.__class__.__name__)
         self.intensity = intensity
         self.location = location
         self.num_exercises = num_exercises
+        self.headless = headless # No keyboard
         self.exercises = load_exercises()  # Load all exercises
         self.planner = Planner(self.exercises, intensity=self.intensity, location=self.location)
         self.planned_exercises = self.planner.plan(self.num_exercises)
@@ -21,6 +22,13 @@ class Runner:
         self.engine.setProperty('rate', 180)
 
         self.music = MusicHandler()
+
+    def _keywait(self, location: str, headless: bool, prep_time: int = 3) -> None:
+        if not headless and location.lower() == "indoor":
+            input("Press Enter when ready...")
+        else:
+            self.speak(f"Prep for {prep_time} seconds!")
+            time.sleep(prep_time)
 
     def speak(self, text: str) -> None:
         """TTS and logging."""
@@ -39,12 +47,7 @@ class Runner:
         if exercise.props:
             self.speak(f"Props needed: {', '.join(exercise.props)}")
 
-        if exercise.location.lower() == "indoor":
-            self.speak("Press enter when ready!!!!")
-            input("Press Enter when ready...")
-        else:
-            self.speak(f"Prep for {prep_time} seconds!")
-            time.sleep(prep_time)
+        self._keywait(exercise.location, headless=self.headless, prep_time=prep_time)
 
     def countdown(self, seconds: int = 3) -> None:
         """Countdown before GO."""
@@ -66,13 +69,16 @@ class Runner:
             try:
                 elapsed = time.time() - start_time
                 if not halfway_called and elapsed >= duration / 2:
+                    self.music.quieten()
                     self.speak("Halfway there!")
+                    self.music.louden()
                     halfway_called = True
                 time.sleep(0.5)
             except KeyboardInterrupt:
                 self.speak("Exercise skipped!")
                 break
 
+        self.music.quieten()
         self.speak(f"Completed {exercise.name}!")
 
     def prepare_props(self) -> None:
@@ -94,13 +100,22 @@ class Runner:
         self.music.play()
         self.music.quieten()
         self.prepare_props()
-        input("Press enter when ready...")
-        for ex in self.planned_exercises:
+        # ALWAYS keywait after prepare props cause gotta get shit ready and might take a while
+        self._keywait("indoor", headless=False)
+        for i, ex in enumerate(self.planned_exercises):
             self.music.next_track()
+            self.music.quieten()
             self.prep(ex)
-            self.countdown()
+            # First go we countdown from a higher number so if outdoors we can get extra time to go out!!
+            if i == 0:
+                self.countdown(5)
+            else:
+                self.countdown()
             self.go(ex)
-            self.speak("Next exercise coming up!")
+            if i < len(self.planned_exercises) - 1:
+                self.speak("Next exercise coming up!")
+        self.music.quieten()
+        self.speak("Routine completed!")
 
     def show_planned(self) -> None:
         """Print planned exercises for debug/inspection."""

@@ -34,7 +34,7 @@ class MusicHandler:
     def _load_music(self) -> List[str]:
         if not self.music_dir.exists():
             return []
-        return [str(f) for f in self.music_dir.iterdir() if f.suffix.lower() in ('.mp3', '.wav')]
+        return [str(f) for f in self.music_dir.iterdir() if f.suffix.lower() in ('.mp3', '.wav', '.ogg')]
 
     def play(self) -> None:
         """Play a random track from last known position."""
@@ -44,7 +44,7 @@ class MusicHandler:
         self.current_track = track
         pos = self.track_positions.get(track, 0.0)
         pygame.mixer.music.load(track)
-        pygame.mixer.music.play(loops=1, start=pos)
+        pygame.mixer.music.play(loops=-1, start=pos)
         volume = 1.0
         # Dumb override for LOUD AS HELL Team Mekano
         self.logger.debug(f"Playing track {self.current_track}")
