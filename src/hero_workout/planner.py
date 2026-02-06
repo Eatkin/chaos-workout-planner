@@ -94,8 +94,10 @@ class Planner:
                 ex_copy.assigned_duration = randint(min_sec, max_sec)
 
             # Resolve 'any' to either indoor our outdoor
-            if ex_copy.location == "any":
+            if ex_copy.location == "any" and self.location == "any":
                 ex_copy.location = choice(["indoor", "outdoor"])
+            else:
+                ex_copy.location = self.location
 
             planned.append(ex_copy)
 
