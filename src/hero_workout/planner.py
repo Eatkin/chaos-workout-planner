@@ -38,7 +38,7 @@ class Planner:
         return dict(props_by_location)
 
     def _filter_exercise(self, ex: Exercise) -> bool:
-        if ex.location == self.location or self.location == "any" or ex.location == "any":
+        if (ex.location == self.location or self.location == "any") or ex.location == "any":
             return True
         return False
 
@@ -97,7 +97,7 @@ class Planner:
             if ex_copy.location == "any" and self.location == "any":
                 ex_copy.location = choice(["indoor", "outdoor"])
             else:
-                ex_copy.location = self.location
+                ex_copy.location = ex.location
 
             planned.append(ex_copy)
 
